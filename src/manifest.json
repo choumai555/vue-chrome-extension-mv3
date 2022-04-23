@@ -27,20 +27,8 @@
         "matches": [
             "*://*/*"
         ],
-        "css": [
-            "static/content/css/index.css",
-            "static/content/css/base.css",
-            "static/content/js/dialog/dialog.css",
-            "static/content/css/main.css"
-        ],
-        "js": [
-            "static/content/js/jquery/jquery.min.js",
-            "static/content/js/md5.js",
-            "static/content/js/base_js/base.js",
-            "static/content/js/dialog/dialog.js",
-            "static/content/js/link.js",
-            "content.main.js"
-        ],
+        "css": [],
+        "js": ["content.main.js"],
         "run_at": "document_end"
     }],
     "host_permissions": [
