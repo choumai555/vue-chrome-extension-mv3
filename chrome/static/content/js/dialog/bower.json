@@ -1,0 +1,25 @@
+{
+  "name": "dialog",
+  "main": "dialog.js",
+  "version": "0.0.1",
+  "authors": [
+    "yuq"
+  ],
+  "description": "dialog, analog alert, analog confirm, loading",
+  "keywords": [
+    "dialog"
+  ],
+  "license": "MIT",
+  "homepage": "http://10.104.100.6/mmc_comb/dialog",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "./",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "*"
+  }
+}
