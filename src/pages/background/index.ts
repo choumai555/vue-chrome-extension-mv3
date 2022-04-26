@@ -1,6 +1,3 @@
-/**
- * Created by hale_v on 16/11/29.
- */
 import { axios } from '@/api/useAxios'
 //调用chrome事件
 function chromeEvent(request: { funName: any; pramas: any; }, sender: any, callback: (arg0: any[]) => any) {
@@ -8,15 +5,19 @@ function chromeEvent(request: { funName: any; pramas: any; }, sender: any, callb
   let funCode = funName.split('.');
   let chromeFun = chrome;
   const chromeCallback = (...arr: any[]) => callback(arr)
-  funCode.forEach((item: string) => {
+  funCode.forEach((item: string, index: number) => {
     if (typeof chromeFun[item] !== 'undefined')
-      chromeFun = chromeFun[item]
+      //最后一个参数
+      if (index + 1 === funCode.length) {
+        if (typeof chromeFun[item] === 'function') {
+          let callbackindex = pramas.findIndex((item: any) => typeof item === 'object' && 'callback' in item && item['callback'])
+          if (callbackindex != -1) pramas[callbackindex] = chromeCallback;
+          chromeFun[item](...pramas)
+        } else throw new Error('未找到对应的chrome方法')
+      } else {
+        chromeFun = chromeFun[item]
+      }
   })
-  if (typeof chromeFun === 'function') {
-    let callbackindex = pramas.findIndex((item: any) => typeof item === 'object' && 'callback' in item && item['callback'])
-    if (callbackindex != -1) pramas[callbackindex] = chromeCallback;
-    chromeFun(...pramas)
-  } else throw new Error('未找到对应的chrome方法')
 }
 chrome.runtime.onMessage.addListener(function (request: any, sender: any, sendResponse: any) {
   switch (request.funType) {
