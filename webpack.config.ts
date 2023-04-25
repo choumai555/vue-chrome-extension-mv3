@@ -4,6 +4,7 @@ import { VueLoaderPlugin } from 'vue-loader'
 import Components from 'unplugin-vue-components/webpack'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import type { Configuration } from 'webpack'
+import AutoImport from 'unplugin-auto-import/webpack'
 import webpack from 'webpack'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 function assetsPath(_path) {
@@ -55,18 +56,10 @@ const config: Configuration = {
           limit: 100000,
           name: assetsPath('img/[name].[hash:7].[ext]')
         }
-      }, {
-        test: /\.less$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'less-loader'
-        ]
       },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+      { test: /\.less$/, use: ['style-loader', 'css-loader', 'less-loader'] },//less的loader
+      { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'] },//scss的loader
     ],
   },
   plugins: [
@@ -110,9 +103,27 @@ const config: Configuration = {
     ], {
       copyUnmodified: true
     }),
+    AutoImport({
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+        /\.vue$/,
+        /\.vue\?vue/, // .vue
+        /\.md$/ // .md
+      ],
+      imports: [
+        'vue', {}
+      ],
+      dts: 'src/types/auto-imports.d.ts',
+      resolvers: [],
+      eslintrc: {
+        enabled: false, // Default `false`
+        filepath: './.eslintrc-auto-import.json', // Default `./.eslintrc-auto-import.json`
+        globalsPropValue: true // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
+      }
+    }),
     Components({
       resolvers: [ElementPlusResolver({})],
-      dts: resolve('src', 'components.d.ts'),
+      dts: 'types/components.d.ts',
     }),
   ],
 }
